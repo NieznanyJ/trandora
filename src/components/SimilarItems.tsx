@@ -41,7 +41,7 @@ export default function ProductDetails({ product }: { product: products.Product 
           <div className="flex flex-col items-end">
             {product.discount?.type !== 'NONE' && (
               <span className="text-2xl font-bold text-red-600">
-                {selectedVariant?.priceData?.formatted?.discountedPrice || product.priceData?.formatted?.discountedPrice}
+                {selectedVariant?.variant?.priceData?.formatted?.discountedPrice || product.priceData?.formatted?.discountedPrice}
               </span>
             )}
             <span
@@ -49,7 +49,7 @@ export default function ProductDetails({ product }: { product: products.Product 
                 product.discount?.type !== 'NONE' ? 'line-through text-gray-500' : 'font-bold'
               }`}
             >
-              {selectedVariant?.priceData?.formatted?.price || product.priceData?.formatted?.price}
+              {selectedVariant?.variant?.priceData?.formatted?.price || product.priceData?.formatted?.price}
             </span>
           </div>
         </div>
@@ -58,7 +58,7 @@ export default function ProductDetails({ product }: { product: products.Product 
           productOptions={product.productOptions!}
           variants={product.variants!}
           productId={product._id!}
-          onVariantChange={handleVariantChange}
+          
         />
         
         <QuantityChanger variant={selectedVariant} />
@@ -77,11 +77,7 @@ export default function ProductDetails({ product }: { product: products.Product 
           </div>
         )}
         
-        {product.weight && (
-          <div className="text-sm text-gray-500">
-            <span className="font-semibold">Weight:</span> {product.weight.value} {product.weight.unit}
-          </div>
-        )}
+        
       </div>
     </div>
   );
