@@ -8,9 +8,23 @@ import CollectionItemList from "@/components/CollectionItemList";
 import Sidebar from "@/components/Sidebar";
 import { products } from "@wix/stores";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { cookies } from "next/headers";
 
+async function getCookieData() {
+    const cookieData = cookies().getAll()
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        resolve(cookieData)
+      }, 1000)
+    )
+  }
+
+export const dynamic = 'force-dynamic'
 
 export default async function ProductsPage({ searchParams }: { searchParams: { page: string, name: string, min: string, max: string, category: string, sort: string } }) {
+
+
+    await getCookieData();
 
     const wixClient = await wixClientServer();
 

@@ -13,7 +13,7 @@ function CheckoutItems() {
 
     const wixClient = useWixClient()
     const dispatch = useAppDispatch()
-    const checkoutItems = useAppSelector((state) => state.cartSlice.cart)
+    const cart = useAppSelector((state) => state.cartSlice.cart)
     const total = useAppSelector((state) => state.cartSlice.total)
 
     function handleRemoveItem(itemId: string) {
@@ -23,9 +23,9 @@ function CheckoutItems() {
 
     return (
         <div className="flex flex-col gap-4">
-            {checkoutItems?.length! > 0 ?
+            {cart?.lineItems?.length! > 0 ?
                 <ul className="flex flex-col gap-4">
-                    {checkoutItems?.map(item => (
+                    {cart?.lineItems?.map(item => (
                         <CartItem key={item._id} product={item}  />
                     ))}
                 </ul> :
@@ -36,7 +36,7 @@ function CheckoutItems() {
                     </Link></div>
             }
 
-            {checkoutItems && checkoutItems.length > 0 && <p className="flex items-center gap-4 justify-end border-t-[1px] border-black pt-4">Total: {total}</p>}
+            {cart?.lineItems && cart?.lineItems.length > 0 && <p className="flex items-center gap-4 justify-end border-t-[1px] border-black pt-4">Total: {total}</p>}
 
         </div>
     )

@@ -20,13 +20,16 @@ function Cart({ className }: { className?: string }) {
     const dispatch = useAppDispatch()
     const nrOfItems = useAppSelector((state) => state.cartSlice.nrOfCartItems)
     const total = useAppSelector((state) => state.cartSlice.total)
-    const cartItems = useAppSelector((state) => state.cartSlice.cart)
-
-
+    const cart = useAppSelector((state) => state.cartSlice.cart)
+    const isLoggedIn = useAppSelector((state) => state.cartSlice.isLoggedIn)
 
     useEffect(() => {
+        function getCart() {
+            dispatch(fetchCart(wixClient))
 
-        dispatch(setNrOfItems(cartItems))
+        }
+        isLoggedIn &&  getCart()
+        isLoggedIn && dispatch(setNrOfItems(cart?.lineItems))
         const handleClickOutside = (event: MouseEvent) => {
             if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
                 setCartOpen(false)
@@ -40,22 +43,13 @@ function Cart({ className }: { className?: string }) {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-    }, [cartOpen, wixClient.currentCart, dispatch, wixClient, cartItems])
+    }, [cartOpen, wixClient.currentCart, dispatch, wixClient, cart, isLoggedIn])
 
 
-    useMemo(() => {
-        function getCart() {
-            dispatch(fetchCart(wixClient))
-
-
-
-
-        }
-
-
-        getCart()
-    }, [dispatch, wixClient])
-
+    /* useMemo(() => {
+        
+    }, [dispatch, wixClient, isLoggedIn])
+ */
     return (
         <div className='relative flex items-center'>
             <button className='relative' onClick={() => setCartOpen(prev => !prev)}>
@@ -67,9 +61,9 @@ function Cart({ className }: { className?: string }) {
                 <div ref={cartRef} className='bg-white shadow-md rounded-md w-screen h-screen top-14 -right-2 absolute flex flex-col justify-between gap-4 p-4 md:min-w-[400px] md:min-h-[300px] md:w-full md:h-max md:max-h-[600px] z-20'>
                     <p className="text-md font-semibold w-full border-b-[1px] border-black pb-2">CART ({nrOfItems || 0})</p>
 
-                    {cartItems?.length! > 0 ?
+                    {cart?.lineItems?.length! > 0 ?
                         <ul className="flex flex-col gap-2 border-b-[1px] border-black pb-4">
-                            {cartItems?.map((item, index) =>
+                            {cart?.lineItems?.map((item, index) =>
                                 <div key={item._id}>
                                     {index < 4 && <CartItem product={item} key={item._id} />}
                                 </div>
@@ -78,7 +72,7 @@ function Cart({ className }: { className?: string }) {
 
                     <div className="flex items-center justify-end">
 
-                        {cartItems && cartItems.length > 0 && <p className="flex items-center gap-4">Total: {total}</p>}
+                        {cart?.lineItems && cart?.lineItems.length > 0 && <p className="flex items-center gap-4">Total: {total}</p>}
                     </div>
                     <div className="flex items-center justify-between">
                         <Button className='bg-white text-black border-[1px] border-black hover:bg-black hover:text-white transition-colors font-medium'>GO TO CART</Button>

@@ -1,30 +1,38 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { currentCart } from "@wix/ecom";
+import { currentCart, cart } from "@wix/ecom";
 import { WixClient } from "@/context/WixContext";
 
 interface CartState {
     nrOfCartItems: number | undefined;
     quantity: number;
-    cart: currentCart.LineItem[] | undefined;
+    cart: cart.Cart | undefined;
     total: string;
+    isLoggedIn: boolean
 }
 
 const initialState: CartState = {
     nrOfCartItems: undefined,
     quantity: 1,
-    cart: [],
-    total: ''
+    cart: undefined,
+    total: '',
+    isLoggedIn: false
 };
 
 export const fetchCart = createAsyncThunk(
     "cart/fetchCart",
     async (wixClient: WixClient, { rejectWithValue }) => {
         try {
-            const cart = (await wixClient.currentCart.getCurrentCart())
-                .lineItems;
+            let cart;
+            try {
+                cart = await wixClient.currentCart.getCurrentCart();
+            } catch (error: any) {
+                console.error(error)
+                throw error
+            }
+            
             return cart;
         } catch (error) {
-            console.error("Error fetching cart:", error);
+            console.error("Error fetching or creating cart:", error);
             return rejectWithValue(error);
         }
     }
@@ -95,6 +103,9 @@ export const cartState = createSlice({
         setNrOfItems: (state, action: PayloadAction<currentCart.LineItem[] | undefined>) => {
             state.nrOfCartItems = action.payload?.length;
         },
+        setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
+            state.isLoggedIn = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -107,7 +118,7 @@ export const cartState = createSlice({
 
         builder
             .addCase(addToCart.fulfilled, (state, action) => {
-                state.cart = action.payload.cart?.lineItems;
+                state.cart = action.payload.cart;
                 state.nrOfCartItems = action.payload?.cart?.lineItems.reduce((nr, item: currentCart.LineItem) => nr+ item.quantity! ,0)
                 state.total= action.payload.cart?.subtotal?.formattedAmount || '0'
             })
@@ -116,7 +127,7 @@ export const cartState = createSlice({
             });
         builder
             .addCase(removeItem.fulfilled, (state,action) => {
-                state.cart = action.payload?.cart?.lineItems;
+                state.cart = action.payload?.cart;
                 state.nrOfCartItems = action.payload?.cart?.lineItems.reduce((nr, item: currentCart.LineItem) => nr+ item.quantity! ,0)
                 state.total= action.payload.cart?.subtotal?.formattedAmount || '0'
 
@@ -127,5 +138,5 @@ export const cartState = createSlice({
     },
 });
 
-export const { setQuantity, setNrOfItems } = cartState.actions;
+export const { setQuantity, setNrOfItems, setIsLoggedIn } = cartState.actions;
 export default cartState.reducer;

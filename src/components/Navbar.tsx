@@ -1,9 +1,12 @@
+'use client'
 import React from 'react'
 import Link from "next/link"
 import Image from "next/image"
 import Cart from '@/components/Cart'
 import { ChevronDown } from 'lucide-react'
 import UserBox from './UserBox'
+import { wixClientServer } from '@/lib/wixClientServer'
+import { useAppSelector } from '@/lib/hooks'
 
 const NAVIGATION_LINKS = [
   {
@@ -26,9 +29,10 @@ const NAVIGATION_LINKS = [
 
 const CATEGORY_LINKS = ['New', 'Sale', 'Bestsellers', 'Dresses', 'Shoes', 'Bags', 'Accessories']
 
-function Navbar({ className }: { className?: string }) {
+ function Navbar({ className }: { className?: string }) {
 
-  
+  const isLoggedIn = useAppSelector((state) => state.cartSlice.isLoggedIn)
+  console.log(isLoggedIn)
 
   return (
     <nav className="hidden sticky top-0 left-0 z-[1000] bg-white md:flex flex-col items-center justify-between w-full xl:px-0 border-b-[1px] border-black">
@@ -61,7 +65,7 @@ function Navbar({ className }: { className?: string }) {
         </ul>
        <div className='flex items-center gap-6'>
        <UserBox />
-       <Cart />
+      <Cart />
        </div>
         </div>
       </div>

@@ -3,6 +3,9 @@ import CheckoutItems from "@/components/CheckoutItems";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { members } from "@wix/members";
 
+
+export const dynamic = 'force-dynamic'
+
 export default async function Chacktou() {
 
     const wixClient = wixClientServer();
