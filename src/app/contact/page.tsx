@@ -10,9 +10,9 @@ export default function ContactPage() {
 
 
             <section className='px-4 flex flex-col-reverse md:flex-row gap-10 items-start max-w-[1440px] mx-auto py-20'>
-                <div className="flex flex-col w-full text-start  gap-6 text-black text-sm flex-1 ">
+                <div className="flex flex-col w-full text-start  gap-6 text-black  flex-1 ">
                     <p>support@trendora.com</p>
-                    <div className="flex flex-col gap-2 text-sm text-black">
+                    <div className="flex flex-col gap-2 text-black">
                         <p>1234 Commerce Avenue, Suite 567</p>
                         <p>Mercantile Business Park</p>
                         <p>Metropolis, NY 10108</p>

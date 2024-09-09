@@ -12,13 +12,14 @@ import { z } from 'zod'
 import { members } from '@wix/members';
 
 
-export default  function CheckoutForm({contact, email, addresses}: {contact?: members.Contact, email?:string, addresses?: members.Address[]}) {
+export default function CheckoutForm({ contact, email, addresses }: { contact?: members.Contact, email?: string, addresses?: members.Address[] }) {
 
 
 
 
+  const [submitted, setSubmitted] = useState(false);
 
-  
+
   const form = useForm<z.infer<typeof checkoutFormSchema>>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
@@ -27,9 +28,9 @@ export default  function CheckoutForm({contact, email, addresses}: {contact?: me
       email: email || '',
       phone: contact?.phones![0] || '',
       address: {
-        street: addresses && addresses[0].addressLine ? addresses[0].addressLine  : '' ,
+        street: addresses && addresses[0].addressLine ? addresses[0].addressLine : '',
         city: addresses && addresses[0].city ? addresses[0].city : '',
-        state: addresses && addresses[0].subdivision ? addresses[0].subdivision : '' ,
+        state: addresses && addresses[0].subdivision ? addresses[0].subdivision : '',
         postalCode: addresses && addresses[0].postalCode ? addresses[0].postalCode : '',
         country: addresses && addresses[0].country ? addresses[0].country : '',
       },
@@ -45,7 +46,8 @@ export default  function CheckoutForm({contact, email, addresses}: {contact?: me
   });
 
   const onSubmit = (values: z.infer<typeof checkoutFormSchema>) => {
-    console.log(values);
+    setSubmitted(true)
+
 
   };
 
@@ -286,6 +288,13 @@ export default  function CheckoutForm({contact, email, addresses}: {contact?: me
         <Button type="submit" className='w-full bg-white text-black border-[1px] border-black hover:bg-black hover:text-white transition-colors font-medium'>
           COMPLETE CHECKOUT
         </Button>
+
+
+        {submitted && (
+          <div className='mt-4 p-4 bg-green-100 text-green-800 rounded-md'>
+            Your order has been made
+          </div>
+        )}
       </form>
     </Form>
   );

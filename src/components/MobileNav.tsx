@@ -1,3 +1,4 @@
+
 'use client'
 import { useState } from 'react'
 import { X, Menu, ChevronDown, ChevronUp } from 'lucide-react'
@@ -6,15 +7,27 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import Cart from './Cart'
 
-const NAVIGATION_LINKS = [
-    { label: 'MEN', href: '/collection/Men' },
-    { label: 'WOMEN', href: '/collection/Women' },
-    { label: 'KIDS', href: '/collection/Kids' },
-    { label: 'ABOUT', href: '/' },
-    { label: 'CONTACT', href: '/' },
-]
 
-const CATEGORY_LINKS = ['New', 'Sale', 'Bestsellers', 'Dresses', 'Shoes', 'Bags', 'Accessories']
+const NAVIGATION_LINKS = [
+    {
+      label: 'HOME',
+      href: '/'
+    },
+    {
+      label: 'PRODUCTS',
+      href: '/products'
+    },
+    {
+      label: 'ABOUT',
+      href: '/about'
+    },
+    {
+      label: 'CONTACT',
+      href: '/contact'
+    },
+  ]
+  
+  const CATEGORY_LINKS = ['New', 'Sale', 'Bestsellers', 'Dresses', 'Shoes', 'Bags', 'Accessories']
 
 function MobileNav({ className }: { className?: string }) {
     const [navOpen, setNavOpen] = useState(false)
@@ -32,7 +45,7 @@ function MobileNav({ className }: { className?: string }) {
             >
                 <Menu size={24} />
             </button>
-            <Link href='/'><Image src='/logo.svg' alt='Trendora' width={160} height={160} /></Link>
+            <Link onClick={() => setNavOpen(false)} href='/'><Image src='/logo.svg' alt='Trendora' width={160} height={160} /></Link>
             <div className='flex items-center gap-4'>
                 <div className='relative'>
                     <Cart />
@@ -52,39 +65,30 @@ function MobileNav({ className }: { className?: string }) {
                 >
                     <X size={24} />
                 </button>
-                <ul className="pt-24 px-4 flex flex-col gap-2">
-                    {NAVIGATION_LINKS.map((link) => (
-                        <li
-                            className='nav-link transition-colors w-full text-start'
-                            key={link.label}
-                        >
-                            {(link.label === 'MEN' || link.label === 'WOMEN' || link.label === 'KIDS') ? (
-                                <div className='flex flex-col'>
-                                    <div 
-                                        className='flex items-center justify-between p-4 cursor-pointer hover:bg-black hover:text-white'
-                                        onClick={() => toggleDropdown(link.label)}
-                                    >
-                                        <span>{link.label}</span>
-                                        {activeDropdown === link.label ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                                    </div>
-                                    <ul className={`bg-gray-100 transition-all duration-300 ease-in-out overflow-hidden ${activeDropdown === link.label ? 'max-h-screen' : 'max-h-0'}`}>
-                                        {CATEGORY_LINKS.map((category) => (
-                                            <li key={category} className="hover:bg-black text-sm transition-colors">
-                                                <Link href={`${link.href}/${category}`} className="block p-4 text-black hover:text-white transition-colors uppercase">
-                                                    {category}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ) : (
-                                <Link href={link.href} className="block p-4 hover:bg-black hover:text-white">
-                                    {link.label}
-                                </Link>
-                            )}
-                        </li>
-                    ))}
+                <ul className='pt-24 px-4 flex flex-col gap-2'>
+          {NAVIGATION_LINKS.map((link) => (
+            <li 
+              className='nav-link  hover:bg-black hover:text-white transition-colors p-4 w-full h-full text-center group relative' 
+              key={link.label}
+            >
+              <Link onClick={() => link.label !== 'PRODUCTS' && setNavOpen(false)} className='flex gap-2 items-center' href={link.href}>{link.label} {link.label === 'PRODUCTS' && <ChevronDown size={20} />}</Link>
+              {(link.label === 'PRODUCTS') &&
+                <ul className="hidden group-hover:flex flex-col  absolute top-full left-0 w-full bg-white shadow-md z-50">
+                  {CATEGORY_LINKS.map((category) => (
+                    
+                    <Link onClick={() => setNavOpen(false)} key={category} href={`${link.href}/${category}`} className="p-2 hover:text-white transition-colors hover:bg-black text-black uppercase">
+                    <li  className=" text-start ">
+                     
+                        {category}
+                      
+                    </li>
+                    </Link>
+                  ))}
                 </ul>
+              }
+            </li>
+          ))}
+        </ul>
             </nav>
 
             {/* Overlay */}
