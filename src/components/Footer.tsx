@@ -50,7 +50,7 @@ function Footer() {
                 <div className="flex flex-col items-center md:items-start md:text-start  text-center gap-6 flex-1">
                     <p className="font-heading text-white text-2xl ">GET CREATIVE WITH CLOTHES.
                         STYLISH INSPIRATION FOR EVERY OCCASION.</p>
-                    <Button className="bg-black border-2 border-white text-white hover:bg-white hover:text-black transition-colors">CONTACT US</Button>
+                    <Link href='/contact'><Button className="bg-black border-2 border-white text-white hover:bg-white hover:text-black transition-colors">CONTACT US</Button></Link>
                 </div>
 
                 <div className='w-full flex flex-col md:flex-row md:items-start  items-center  gap-10 justify-between flex-1'>
